@@ -267,7 +267,7 @@ class _WandbInit(object):
         """Teardown hooks and display saving, called with wandb.finish"""
         print("jupyter teardown start")
         ipython = self.notebook.shell
-        self.notebook.save_history()
+        # self.notebook.save_history()
         print("saved history")
         if self.notebook.save_ipynb():
             print("logging code")
@@ -275,12 +275,17 @@ class _WandbInit(object):
             print("logged code")
             logger.info("saved code and history")
         logger.info("cleaning up jupyter logic")
+        for hook in ipython.events.callbacks["pre_run_cell"]:
+            print(hook.__name__)
         # because of how we bind our methods we manually find them to unregister
         for hook in ipython.events.callbacks["pre_run_cell"]:
             if "_resume_backend" in hook.__name__:
                 print("unregistering pre_run_cell")
                 ipython.events.unregister("pre_run_cell", hook)
                 print("unregistered pre_run_cell")
+        print("ASBDJKASD")
+        for hook in ipython.events.callbacks["post_run_cell"]:
+            print(hook.__name__)
         for hook in ipython.events.callbacks["post_run_cell"]:
             if "_pause_backend" in hook.__name__:
                 print("unregistering post_run_cell")
