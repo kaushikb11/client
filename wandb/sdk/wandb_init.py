@@ -269,11 +269,11 @@ class _WandbInit(object):
         ipython = self.notebook.shell
         # self.notebook.save_history()
         print("saved history")
-        # if self.notebook.save_ipynb():
-        #    print("logging code")
-        #    self.run.log_code(root=None)
-        #    print("logged code")
-        #    logger.info("saved code and history")
+        if self.notebook.save_ipynb():
+            print("logging code")
+            self.run.log_code(root=None)
+            print("logged code")
+            logger.info("saved code and history")
         logger.info("cleaning up jupyter logic")
         for hook in ipython.events.callbacks["pre_run_cell"]:
             print(hook.__name__)

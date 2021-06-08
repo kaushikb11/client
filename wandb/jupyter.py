@@ -265,6 +265,7 @@ class Notebook(object):
             logger.info("not saving jupyter notebook")
             return False
         relpath = self.settings._jupyter_path
+
         logger.info("looking for notebook: %s", relpath)
         if relpath:
             if os.path.exists(relpath):
@@ -277,7 +278,9 @@ class Notebook(object):
                 return True
 
         # TODO: likely only save if the code has changed
+        print("getting colab ipynb")
         colab_ipynb = attempt_colab_load_ipynb()
+        print("got colab ipynb")
         if colab_ipynb:
             with open(
                 os.path.join(
