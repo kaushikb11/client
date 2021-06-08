@@ -268,19 +268,30 @@ class _WandbInit(object):
         print("jupyter teardown start")
         ipython = self.notebook.shell
         self.notebook.save_history()
+        print("saved history")
         if self.notebook.save_ipynb():
+            print("logging code")
             self.run.log_code(root=None)
+            print("logged code")
             logger.info("saved code and history")
         logger.info("cleaning up jupyter logic")
         # because of how we bind our methods we manually find them to unregister
         for hook in ipython.events.callbacks["pre_run_cell"]:
             if "_resume_backend" in hook.__name__:
+                print("unregistering pre_run_cell")
                 ipython.events.unregister("pre_run_cell", hook)
+                print("unregistered pre_run_cell")
         for hook in ipython.events.callbacks["post_run_cell"]:
             if "_pause_backend" in hook.__name__:
+                print("unregistering post_run_cell")
                 ipython.events.unregister("post_run_cell", hook)
+                print("unregistered post_run_cell")
+        print("setting pub.publish")
         ipython.display_pub.publish = ipython.display_pub._orig_publish
+        print("setted pub.publish")
+
         del ipython.display_pub._orig_publish
+        print("dellled")
         print("jupyter teardown finish")
 
     def _jupyter_setup(self, settings):
