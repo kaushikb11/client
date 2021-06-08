@@ -92,7 +92,9 @@ class _WandbInit(object):
             settings=settings.duplicate().freeze()
         )
 
-        sm_config: Dict = {} if settings.sagemaker_disable else sagemaker.parse_sm_config()
+        sm_config: Dict = (
+            {} if settings.sagemaker_disable else sagemaker.parse_sm_config()
+        )
         if sm_config:
             sm_api_key = sm_config.get("wandb_api_key", None)
             sm_run, sm_env = sagemaker.parse_sm_resources()
@@ -170,7 +172,10 @@ class _WandbInit(object):
             settings.update({"save_code": False})
 
         # TODO(jhr): should this be moved? probably.
-        d = dict(_start_time=time.time(), _start_datetime=datetime.datetime.now(),)
+        d = dict(
+            _start_time=time.time(),
+            _start_datetime=datetime.datetime.now(),
+        )
         settings.update(d)
 
         if not settings._noop:
@@ -260,6 +265,7 @@ class _WandbInit(object):
 
     def _jupyter_teardown(self):
         """Teardown hooks and display saving, called with wandb.finish"""
+        print("jupyter teardown start")
         ipython = self.notebook.shell
         self.notebook.save_history()
         if self.notebook.save_ipynb():
@@ -275,6 +281,7 @@ class _WandbInit(object):
                 ipython.events.unregister("post_run_cell", hook)
         ipython.display_pub.publish = ipython.display_pub._orig_publish
         del ipython.display_pub._orig_publish
+        print("jupyter teardown finish")
 
     def _jupyter_setup(self, settings):
         """Add magic, hooks, and session history saving"""

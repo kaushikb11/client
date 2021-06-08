@@ -1207,6 +1207,7 @@ class Run(object):
             tel.feature.finish = True
         # detach logger, other setup cleanup
         logger.info("finishing run %s", self.path)
+        print("starting hooks")
         for hook in self._teardown_hooks:
             hook()
         self._teardown_hooks = []
