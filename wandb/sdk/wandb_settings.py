@@ -546,7 +546,9 @@ class Settings(object):
 
     @property
     def tmp_dir(self) -> str:
-        return self._path_convert(self.tmp_dir_spec) or tempfile.gettempdir()
+        z = self._path_convert(self.tmp_dir_spec) or tempfile.gettempdir()
+        print("STEEING TMP", z)
+        return z
 
     @property
     def _tmp_code_dir(self) -> str:
